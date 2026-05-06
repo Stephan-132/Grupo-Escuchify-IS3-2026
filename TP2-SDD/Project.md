@@ -4,10 +4,11 @@
 1. **Usuarios y Autenticación**: Gestión de registro, inicio de sesión y perfiles de usuarios. Entidad original: `Usuario`.
 2. **Gestión de Eventos**: Creación, edición y administración de eventos académicos (cursos, jornadas, congresos, charlas). Entidades originales: `Evento`, `TipoEvento`.
 3. **Inscripciones**: Registro de participantes a eventos (autónomo y por personal del evento). Entidad original: `Inscripción`.
+4. **Roles y Acreditación**: Gestión de roles (organizador/participante/disertante) y acreditación de participantes. Entidades originales: `Rol`, `Acreditación`.
+5. **Encuestas**: Gestión de comentarios y encuestas de satisfacción post-evento. Entidades originales: `Encuesta`, `PreguntaEncuesta`, `RespuestaEncuesta`.
 6. **Certificados**: Generación de certificados (asistencia, aprobación, participación en calidad de autor/expositor). Entidades originales: `Certificado`, `TipoCertificado`.
 7. **Informes y Agendas**: Generación de informes y agendas del evento. Entidades originales: `Informe`, `AgendaEvento`.
 8. **Catálogo Público**: Visualización pública de eventos con filtros (futuros/pasados). No tiene entidades originales (consulta a `Evento` de Gestión de Eventos).
-
 ---
 
 ## 1. Objetivo y Contexto
