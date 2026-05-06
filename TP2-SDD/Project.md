@@ -48,14 +48,6 @@ Algunos detalles:
 3. Como organizador, quiero cancelar un evento, para informar a los participantes.
    - Criterio de aceptación: El evento cambia a estado "CANCELADO"; se notifica a todos los participantes inscritos.
 
-### Módulo 3: Inscripciones
-1. Como usuario autenticado, quiero inscribirme de forma autónoma a un evento, para participar en él.
-   - Criterio de aceptación: La inscripción se registra si hay cupo disponible y no ha pasado la fecha límite; se genera confirmación automática.
-2. Como personal del evento, quiero inscribir a un participante manualmente, para casos de registro fuera de la plataforma.
-   - Criterio de aceptación: El personal puede buscar usuarios existentes o crear registros temporales; se validan cupos y fechas límite.
-3. Como usuario, quiero cancelar mi inscripción a un evento, para liberar cupo.
-   - Criterio de aceptación: La cancelación es posible hasta 24 horas antes del evento; se libera el cupo ocupado.
-
 ### Módulo 4: Roles y Acreditación
 1. Como organizador, quiero asignar roles a los participantes de un evento, para definir sus permisos.
    - Criterio de aceptación: Se pueden asignar roles de organizador, participante o disertante; un usuario puede tener múltiples roles en diferentes eventos.
@@ -71,14 +63,6 @@ Algunos detalles:
    - Criterio de aceptación: Solo participantes acreditados pueden responder la encuesta; se permite una sola respuesta por usuario por evento.
 3. Como organizador, quiero ver los resultados de la encuesta, para evaluar la satisfacción del evento.
    - Criterio de aceptación: Los resultados se muestran de forma agregada; se exportan a formato CSV si se solicita.
-
-### Módulo 6: Certificados
-1. Como organizador, quiero generar certificados de asistencia para participantes acreditados, para validar su participación.
-   - Criterio de aceptación: El certificado se genera en formato PDF; incluye nombre del participante, evento, fecha y tipo de certificado.
-2. Como disertante, quiero generar un certificado de participación como expositor, para mi currículum.
-   - Criterio de aceptación: El certificado se genera automáticamente para usuarios con rol de disertante en el evento.
-3. Como organizador, quiero generar certificados de aprobación para participantes que cumplan con requisitos, para validar su evaluación.
-   - Criterio de aceptación: Se generan certificados solo para participantes que aprueben la evaluación del evento; se registra la calificación obtenida.
 
 ### Módulo 7: Informes y Agendas
 1. Como organizador, quiero generar un informe de inscripciones de un evento, para conocer la demanda.
@@ -124,19 +108,6 @@ Algunos detalles:
 - RN3: El cupo máximo no puede ser menor al cupo mínimo (si se definen ambos).
 - RN4: Solo el organizador creador del evento puede editarlo o cancelarlo.
 
-### Módulo 3: Inscripciones
-#### Requisitos Funcionales
-- RF1: El sistema debe permitir inscripciones autónomas para usuarios autenticados.
-- RF2: El sistema debe permitir inscripciones manuales por personal del evento.
-- RF3: El sistema debe validar cupo disponible y fecha límite antes de confirmar inscripción.
-- RF4: El sistema debe permitir la cancelación de inscripciones por parte del usuario.
-
-#### Reglas de Negocio
-- RN1: No se permiten inscripciones si se alcanzó el cupo máximo del evento.
-- RN2: No se permiten inscripciones después de la fecha límite establecida.
-- RN3: Solo se puede cancelar una inscripción hasta 24 horas antes del inicio del evento.
-- RN4: Un usuario no puede inscribirse dos veces al mismo evento.
-
 ### Módulo 4: Roles y Acreditación
 #### Requisitos Funcionales
 - RF1: El sistema debe permitir asignar roles (organizador/participante/disertante) a usuarios por evento.
@@ -158,17 +129,6 @@ Algunos detalles:
 - RN1: Solo participantes acreditados pueden responder encuestas del evento.
 - RN2: Un participante solo puede responder una vez por evento.
 - RN3: Las encuestas solo se habilitan después de la finalización del evento.
-
-### Módulo 6: Certificados
-#### Requisitos Funcionales
-- RF1: El sistema debe generar certificados de asistencia para participantes acreditados.
-- RF2: El sistema debe generar certificados de aprobación para participantes que cumplan requisitos.
-- RF3: El sistema debe generar certificados de participación para disertantes.
-
-#### Reglas de Negocio
-- RN1: Los certificados de asistencia solo se generan para participantes con acreditación confirmada.
-- RN2: Los certificados de aprobación requieren una calificación mínima definida por el organizador.
-- RN3: Los certificados de participación (expositor/autor) se generan automáticamente para usuarios con rol de disertante.
 
 ### Módulo 7: Informes y Agendas
 #### Requisitos Funcionales
@@ -274,22 +234,6 @@ Relaciones:
 - 1:N Evento -> Informe (Referencia: Informe.id_evento FK)
 - 1:N Evento -> AgendaEvento (Referencia: AgendaEvento.id_evento FK)
 
-### Módulo 3: Inscripciones
-#### Entidad: Inscripción
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_inscripcion | INT | NOT NULL AUTO_INCREMENT | PK |
-| id_usuario | INT | NOT NULL | FK (Usuario.id_usuario) |
-| id_evento | INT | NOT NULL | FK (Evento.id_evento) |
-| fecha_inscripcion | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP | |
-| estado | VARCHAR(20) | NOT NULL DEFAULT 'CONFIRMADA' | |
-
-Relaciones:
-- N:1 Inscripción -> Usuario (Referencia: Usuario.id_usuario PK)
-- N:1 Inscripción -> Evento (Referencia: Evento.id_evento PK)
-- 1:N Inscripción -> Acreditación (Referencia: Acreditación.id_inscripcion FK)
-- 1:N Inscripción -> Certificado (Referencia: Certificado.id_inscripcion FK)
-
 ### Módulo 4: Roles y Acreditación
 #### Entidad: Rol
 | Atributo | Tipo de dato | Restricciones | PK/FK |
@@ -347,28 +291,6 @@ Relaciones:
 - 1:N Encuesta -> Evento (Referencia: Evento.id_evento FK)
 - N:1 RespuestaEncuesta -> Usuario (Referencia: Usuario.id_usuario PK)
 
-### Módulo 6: Certificados
-#### Entidad: TipoCertificado
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_tipo_certificado | INT | NOT NULL AUTO_INCREMENT | PK |
-| nombre | VARCHAR(50) | NOT NULL UNIQUE | |
-
-#### Entidad: Certificado
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_certificado | INT | NOT NULL AUTO_INCREMENT | PK |
-| id_inscripcion | INT | NOT NULL | FK (Inscripción.id_inscripcion) |
-| id_evento | INT | NOT NULL | FK (Evento.id_evento) |
-| id_tipo_certificado | INT | NOT NULL | FK (TipoCertificado.id_tipo_certificado) |
-| fecha_emision | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP | |
-| calificacion | DECIMAL(5,2) | | |
-
-Relaciones:
-- N:1 Certificado -> Inscripción (Referencia: Inscripción.id_inscripcion PK)
-- N:1 Certificado -> Evento (Referencia: Evento.id_evento PK)
-- N:1 Certificado -> TipoCertificado (Referencia: TipoCertificado.id_tipo_certificado PK)
-
 ### Módulo 7: Informes y Agendas
 #### Entidad: Informe
 | Atributo | Tipo de dato | Restricciones | PK/FK |
@@ -401,7 +323,7 @@ No tiene entidades originales. Consulta la entidad `Evento` del módulo Gestión
 
 ## 6. Plan de Tareas
 ### Tiempo Total Estimado del Proyecto
-Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 semanas (~14 semanas totales).
+Total de días hábiles sumados de todas las tareas: 51 días hábiles → 10.2 semanas (~10 semanas totales).
 
 ### Módulo 1: Usuarios y Autenticación (Total: 10 días hábiles)
 1. Diseño y documentación de entidades y endpoints: 3 días
@@ -417,13 +339,6 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
 4. Validación de reglas de negocio (fechas, cupos): 1 día
 5. Pruebas unitarias y de integración: 3 días
 
-### Módulo 3: Inscripciones (Total: 9 días hábiles)
-1. Diseño y documentación de entidades y endpoints: 2 días
-2. Desarrollo de inscripción autónoma: 2 días
-3. Desarrollo de inscripción manual por personal: 2 días
-4. Desarrollo de cancelación de inscripciones: 1 día
-5. Pruebas unitarias y de integración: 2 días
-
 ### Módulo 4: Roles y Acreditación (Total: 8 días hábiles)
 1. Diseño y documentación de entidades y endpoints: 2 días
 2. Desarrollo de asignación de roles: 2 días
@@ -434,12 +349,6 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
 1. Diseño y documentación de entidades y endpoints: 2 días
 2. Desarrollo de creación de encuestas y preguntas: 2 días
 3. Desarrollo de respuestas a encuestas: 2 días
-4. Pruebas unitarias y de integración: 2 días
-
-### Módulo 6: Certificados (Total: 9 días hábiles)
-1. Diseño y documentación de entidades y endpoints: 2 días
-2. Desarrollo de generación de certificados por tipo: 3 días
-3. Desarrollo de exportación a PDF: 2 días
 4. Pruebas unitarias y de integración: 2 días
 
 ### Módulo 7: Informes y Agendas (Total: 9 días hábiles)
@@ -477,16 +386,6 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
   2. Editar evento con inscripciones confirmadas → Espera error 400 con mensaje "EVENTO_CON_INSCRIPCIONES"
   3. Cancelar evento → Espera estado "CANCELADO" y notificación a inscritos
 
-### Módulo 3: Inscripciones
-- **Tipo de Prueba**: Unitarias (validación de cupos/fechas), Integración (BD), Aceptación (usuario/participante)
-- **Alcance**: Inscripción autónoma/manual, cancelación, validación de cupos
-- **Criterio de Aceptación**: Inscripciones solo se confirman si hay cupo y dentro de fecha límite; cancelación libera cupo.
-- **Criterio de Rechazo**: Permite inscripción con cupo lleno; permite cancelación después de fecha límite.
-- **Casos de Prueba de Ejemplo**:
-  1. Inscribir a usuario cuando cupo máximo alcanzado → Espera error 400 con mensaje "CUPO_LLENO"
-  2. Inscribir después de fecha límite → Espera error 400 con mensaje "FECHA_LIMITE_EXPIRADA"
-  3. Cancelar inscripción 12 horas antes del evento → Espera error 400 con mensaje "CANCELACION_NO_PERMITIDA"
-
 ### Módulo 4: Roles y Acreditación
 - **Tipo de Prueba**: Unitarias (asignación de roles), Integración (BD), Aceptación (organizador)
 - **Alcance**: Asignación de roles, acreditación de participantes, listado de acreditados
@@ -506,16 +405,6 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
   1. Crear encuesta para evento no finalizado → Espera error 400 con mensaje "EVENTO_NO_FINALIZADO"
   2. Responder encuesta sin acreditación → Espera error 400 con mensaje "NO_ACREDITADO"
   3. Responder encuesta dos veces → Espera error 400 con mensaje "ENCUESTA_YA_RESPONDIDA"
-
-### Módulo 6: Certificados
-- **Tipo de Prueba**: Unitarias (generación de certificados), Integración (BD), Aceptación (organizador/participante)
-- **Alcance**: Generación de certificados por tipo, exportación a PDF
-- **Criterio de Aceptación**: Certificados se generan solo para usuarios con requisitos cumplidos; PDF válido.
-- **Criterio de Rechazo**: Genera certificado de asistencia para usuario no acreditado; PDF corrupto.
-- **Casos de Prueba de Ejemplo**:
-  1. Generar certificado de asistencia para usuario no acreditado → Espera error 400 con mensaje "NO_ACREDITADO"
-  2. Generar certificado de aprobación sin calificación mínima → Espera error 400 con mensaje "CALIFICACION_INSUFICIENTE"
-  3. Descargar certificado en PDF → Espera archivo PDF válido con datos correctos
 
 ### Módulo 7: Informes y Agendas
 - **Tipo de Prueba**: Unitarias (generación de informes), Integración (BD), Aceptación (organizador)
